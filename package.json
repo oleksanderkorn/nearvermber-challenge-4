@@ -2,6 +2,7 @@
   "name": "guest-book",
   "version": "0.1.0",
   "license": "(MIT AND Apache-2.0)",
+  "homepage": "https://oleksanderkorn.github.io/nearvember-challenge-4/",
   "scripts": {
     "build": "yarn build:contract && yarn build:web",
     "build:contract": "asb",
@@ -34,8 +35,14 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
+    "@fontsource/roboto": "^4.5.1",
+    "@mui/icons-material": "^5.1.1",
+    "@mui/material": "^5.1.1",
     "big.js": "^6.1.1",
     "env-cmd": "^10.1.0",
+    "moment": "^2.29.1",
     "near-api-js": "^0.41.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -43,7 +50,7 @@
     "regenerator-runtime": "^0.13.7"
   },
   "resolutions": {
-     "@babel/preset-env": "7.13.8"
+    "@babel/preset-env": "7.13.8"
   },
   "jest": {
     "projects": [
