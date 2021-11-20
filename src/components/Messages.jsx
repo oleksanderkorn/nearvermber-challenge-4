@@ -29,15 +29,15 @@ export default function Messages({ messages }) {
     return tabsPercentage;
   };
   return (
-    <Grid container spacing={2}>
+    <>
       <Grid item xs={12} style={{ textAlign: "center" }}>
-        <Typography variant="h5">Voting resuls:</Typography>
+        <Typography variant="h5">Voting results:</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography style={{ textAlign: "center" }}>Tabs</Typography>
+        <Typography style={{ textAlign: "left" }}>Tabs</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography style={{ textAlign: "center" }}>Spaces</Typography>
+        <Typography style={{ textAlign: "right" }}>Spaces</Typography>
       </Grid>
       <Grid item xs={12}>
         <BorderLinearProgress
@@ -71,7 +71,7 @@ export default function Messages({ messages }) {
             <Vote key={i} message={message} />
           ))}
       </Grid>
-    </Grid>
+    </>
   );
 }
 

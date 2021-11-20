@@ -14,8 +14,11 @@ import {
   AppBar,
   Toolbar,
   Button,
-  CssBaseline,
+  Alert,
+  Collapse,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -35,6 +38,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
   const [messages, setMessages] = useState([]);
+  const [error, setError] = useState("");
+  const [isLoading, setIsloading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
   useEffect(() => {
@@ -52,6 +57,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
     // TODO: optimistically update page with new message,
     // update blockchain data in background
     // add uuid to each message, so we know which one is already known
+    setIsloading(true);
     contract
       .addMessage(
         { text: message.value, vote: vote.value },
@@ -60,15 +66,25 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
           .times(10 ** 24)
           .toFixed()
       )
-      .then(() => {
-        contract.getMessages().then((messages) => {
-          setMessages(messages);
-          message.value = "";
-          donation.value = SUGGESTED_DONATION;
-          fieldset.disabled = false;
-          message.focus();
-        });
-      });
+      .then(
+        () => {
+          contract.getMessages().then((messages) => {
+            setMessages(messages);
+            message.value = "";
+            donation.value = SUGGESTED_DONATION;
+            fieldset.disabled = false;
+            setIsloading(false);
+          });
+        },
+        (err) => {
+          setError(
+            err.kind && err.kind.ExecutionError
+              ? err.kind.ExecutionError
+              : `${err}`
+          );
+          setIsloading(false);
+        }
+      );
   };
 
   const signIn = () => {
@@ -106,11 +122,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
       </Typography>
       <Box sx={{ flexGrow: 1 }}>
         {currentUser ? (
-          <Grid
-            style={{ marginTop: 10, alignItems: "center" }}
-            container
-            spacing={2}
-          >
+          <Grid style={{ marginTop: 10 }} container spacing={2}>
             <Grid item xs={12} style={{ textAlign: "center" }}>
               <Typography variant="h5">ULTIMATE VOTING CHALLENGE</Typography>
             </Grid>
@@ -143,7 +155,30 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
                 onSubmit={onSubmit}
                 vote={selectedOption}
                 currentUser={currentUser}
+                isLoading={isLoading}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Collapse in={error !== ""}>
+                <Alert
+                  severity="error"
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setError("");
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  sx={{ mb: 2 }}
+                >
+                  {error}
+                </Alert>
+              </Collapse>
             </Grid>
             {!!messages.length && <Messages messages={messages} />}
           </Grid>
