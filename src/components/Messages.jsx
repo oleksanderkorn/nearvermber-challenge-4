@@ -103,9 +103,6 @@ const Vote = ({ message }) => {
           Comment:
         </Typography>
         <Typography variant="body2">{message.text}</Typography>
-        <Typography variant="body2">
-          {message.premium ? "Rich man" : "Zero"}
-        </Typography>
       </CardContent>
     </Card>
   );
