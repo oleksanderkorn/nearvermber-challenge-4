@@ -41,10 +41,18 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsloading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [isVoted, setIsVoted] = useState(false);
 
   useEffect(() => {
-    // TODO: don't just fetch once; subscribe!
-    contract.getMessages().then(setMessages);
+    contract.getMessages().then((result) => {
+      result
+        .filter((m) => m.sender === currentUser.accountId)
+        .map((m) => {
+          setSelectedOption(m.vote);
+          setIsVoted(true);
+        });
+      setMessages(result);
+    });
   }, []);
 
   const onSubmit = (e) => {
@@ -150,14 +158,16 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
                 SPACES
               </Item>
             </Grid>
-            <Grid item xs={12}>
-              <Form
-                onSubmit={onSubmit}
-                vote={selectedOption}
-                currentUser={currentUser}
-                isLoading={isLoading}
-              />
-            </Grid>
+            {!isVoted && (
+              <Grid item xs={12}>
+                <Form
+                  onSubmit={onSubmit}
+                  vote={selectedOption}
+                  currentUser={currentUser}
+                  isLoading={isLoading}
+                />
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Collapse in={error !== ""}>
                 <Alert

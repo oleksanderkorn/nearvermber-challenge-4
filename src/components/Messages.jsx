@@ -22,6 +22,23 @@ const BorderLinearProgress = styled(LinearProgress)(() => ({
 }));
 
 export default function Messages({ messages }) {
+  const tabs = messages
+    .filter((m) => m.vote === "TABS")
+    .sort((m1, m2) => {
+      if (m1.premium === m2.premium) {
+        return m1.timestamp < m2.timestamp;
+      }
+      return m1.premium ? -1 : 1;
+    });
+  const spaces = messages
+    .filter((m) => m.vote === "SPACES")
+    .sort((m1, m2) => {
+      if (m1.premium === m2.premium) {
+        return m1.timestamp < m2.timestamp;
+      }
+      return m1.premium ? -1 : 1;
+    });
+
   const calculatePercentage = () => {
     const total = messages.length;
     const totalTabs = messages.filter((m) => m.vote === "TABS").length;
@@ -34,10 +51,14 @@ export default function Messages({ messages }) {
         <Typography variant="h5">Voting results:</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography style={{ textAlign: "left" }}>Tabs</Typography>
+        <Typography style={{ textAlign: "left" }}>
+          Tabs ({tabs.length})
+        </Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography style={{ textAlign: "right" }}>Spaces</Typography>
+        <Typography style={{ textAlign: "right" }}>
+          Spaces ({spaces.length})
+        </Typography>
       </Grid>
       <Grid item xs={12}>
         <BorderLinearProgress
@@ -46,30 +67,14 @@ export default function Messages({ messages }) {
         />
       </Grid>
       <Grid item xs={6}>
-        {messages
-          .filter((m) => m.vote === "TABS")
-          .sort((m1, m2) => {
-            if (m1.premium === m2.premium) {
-              return m1.timestamp < m2.timestamp;
-            }
-            return m1.premium ? -1 : 1;
-          })
-          .map((message, i) => (
-            <Vote key={i} message={message} />
-          ))}
+        {tabs.map((message, i) => (
+          <Vote key={i} message={message} />
+        ))}
       </Grid>
       <Grid item xs={6}>
-        {messages
-          .filter((m) => m.vote === "SPACES")
-          .sort((m1, m2) => {
-            if (m1.premium === m2.premium) {
-              return m1.timestamp < m2.timestamp;
-            }
-            return m1.premium ? -1 : 1;
-          })
-          .map((message, i) => (
-            <Vote key={i} message={message} />
-          ))}
+        {spaces.map((message, i) => (
+          <Vote key={i} message={message} />
+        ))}
       </Grid>
     </>
   );
@@ -82,7 +87,7 @@ const Vote = ({ message }) => {
   };
 
   return (
-    <Card sx={{ minWidth: 275, marginTop: 2 }}>
+    <Card sx={{ marginTop: 2 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Account ID

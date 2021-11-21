@@ -9,10 +9,11 @@ export default function Form({ onSubmit, currentUser, vote, isLoading }) {
   return (
     <form onSubmit={onSubmit}>
       <fieldset id="fieldset">
-        <Typography style={{ marginBottom: 2, textAlign: "center" }}>
+        <Typography style={{ textAlign: "center" }}>
           Cast your vote, {currentUser.accountId}!
         </Typography>
         <TextField
+          style={{ marginTop: 6, marginBottom: 6 }}
           fullWidth
           label="Comment your decision"
           variant="outlined"
@@ -21,21 +22,20 @@ export default function Form({ onSubmit, currentUser, vote, isLoading }) {
           id="message"
           required
         />
-        <p>
-          <TextField
-            fullWidth
-            autoComplete="off"
-            defaultValue={"0"}
-            id="donation"
-            max={Big(currentUser.balance).div(10 ** 24)}
-            min="0"
-            step="0.01"
-            type="number"
-            label="Power your vote with some Ⓝ coins (optional)"
-            variant="outlined"
-          />
-          <input type="hidden" id="vote" value={vote} />
-        </p>
+        <TextField
+          style={{ marginTop: 6, marginBottom: 6 }}
+          fullWidth
+          autoComplete="off"
+          defaultValue={"0"}
+          id="donation"
+          max={Big(currentUser.balance).div(10 ** 24)}
+          min="0"
+          step="0.01"
+          type="number"
+          label="Power your vote with some Ⓝ coins (optional)"
+          variant="outlined"
+        />
+        <input type="hidden" id="vote" value={vote} />
         <Button
           fullWidth
           variant="outlined"
@@ -49,6 +49,7 @@ export default function Form({ onSubmit, currentUser, vote, isLoading }) {
         >
           Submit your vote
         </Button>
+        <input type="hidden" id="vote" value={vote} />
         {isLoading && <LinearProgress style={{ marginTop: 4 }} />}
       </fieldset>
     </form>
