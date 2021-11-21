@@ -68,7 +68,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
     setIsloading(true);
     contract
       .addMessage(
-        { text: message.value, vote: vote.value },
+        { text: message.value, vote: selectedOption },
         BOATLOAD_OF_GAS,
         Big(donation.value || "0")
           .times(10 ** 24)
